@@ -29,6 +29,7 @@
         "vue-tsc": "^2.0.24"
     },
     "dependencies": {
+        "oh-vue-icons": "^1.0.0-rc3",
         "ziggy-js": "^2.3.0"
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Section;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -47,15 +48,26 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
+        $sections = [
+            [
+                'title' => 'Section #1',
+            ],
+            [
+                'title' => 'Section #2'],
+            [
+                'title' => 'Section #3'],
+            [
+                'title' => 'Section #4'],
+            [
+                'title' => 'Section #5'],
+        ];
+
         foreach ($users as $user) {
             User::factory()->create($user);
         }
+        foreach ($sections as $section) {
+            Section::factory()->create($section);
+        }
 
-        // User::factory(10)->create();
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
     }
 }
