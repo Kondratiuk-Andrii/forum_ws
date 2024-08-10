@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Branch\StoreRequest;
 use App\Http\Requests\Branch\UpdateRequest;
 use App\Http\Resources\Branch\BranchResource;
+use App\Http\Resources\Branch\BranchWithChildrenResource;
 use App\Http\Resources\Section\SectionResource;
+use App\Http\Resources\Section\SectionWithBranchesResource;
 use App\Models\Branch;
 use App\Models\Section;
 
@@ -40,7 +42,8 @@ class BranchController extends Controller
         $data = $request->validated();
         Branch::firstOrCreate($data);
 
-        return redirect()->route('sections.index');
+        return redirect()->route('sections.index')
+            ->with('message', ['icon' => 'success', 'title' => 'Branch created successfully']);
     }
 
     /**
@@ -49,8 +52,9 @@ class BranchController extends Controller
     public function show(Branch $branch)
     {
         return inertia('Branch/Show', [
-            'branch' => BranchResource::make($branch),
+            'branch' => BranchWithChildrenResource::make($branch),
         ]);
+
     }
 
     /**
@@ -58,7 +62,11 @@ class BranchController extends Controller
      */
     public function edit(Branch $branch)
     {
-        //
+
+        return inertia('Branch/Edit', [
+            'branch' => BranchResource::make($branch),
+            'sections' => $branch->parent_id ? SectionWithBranchesResource::collection(Section::all()) : SectionResource::collection(Section::all()),
+        ]);
     }
 
     /**
@@ -66,7 +74,11 @@ class BranchController extends Controller
      */
     public function update(UpdateRequest $request, Branch $branch)
     {
-        //
+        $data = $request->validated();
+        $branch->update($data);
+
+        return redirect()->route('branches.show', $branch->id)
+            ->with('message', ['icon' => 'success', 'title' => 'Branch updated successfully']);
     }
 
     /**
@@ -74,6 +86,17 @@ class BranchController extends Controller
      */
     public function destroy(Branch $branch)
     {
-        //
+        $branch->delete();
+
+        return redirect()->route('sections.index')
+            ->with('message', ['icon' => 'success', 'title' => 'Branch deleted successfully']);
+    }
+
+    /**
+     * Create theme inside branch
+     */
+    public function themeCreate(Branch $branch)
+    {
+        // TODO: Theme create
     }
 }

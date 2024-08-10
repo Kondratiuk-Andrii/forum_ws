@@ -1,37 +1,45 @@
 <script setup lang="ts">
     import { Head, useForm } from '@inertiajs/vue3';
     import axios from 'axios';
-    import { ref } from 'vue';
+    import { onBeforeMount, onMounted, ref } from 'vue';
     import Breadcrumbs from '@/Components/Breadcrumbs.vue';
     import InputError from '@/Components/InputError.vue';
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+    import { IBranch, ISection } from '@/types';
 
     const props = defineProps<{
-        sections: { id: number; title: string }[];
+        branch: IBranch;
+        sections: ISection[];
     }>();
 
+    const branches = ref<IBranch[]>([]);
+
     const form = useForm({
-        title: '',
-        section_id: null,
-        parent_id: null,
+        title: props.branch.title,
+        section_id: props.branch.section_id,
+        parent_id: props.branch.parent_id,
     });
     const breadcrumbs = ref([
         { label: 'Forum', url: route('sections.index') },
-        { label: 'Create Branch' },
+        { label: `Update ${props.branch.title}` },
     ]);
-
-    const branches = ref<{ id: number; title: string }[]>([]);
 
     const getBranches = () => {
         form.parent_id = null;
-        axios.get(`/sections/${form.section_id}/branches`).then((res) => {
+        axios.get(`/sections/${form.section_id}/branches_except/${props.branch.id}`).then((res) => {
             branches.value = res.data;
         });
     };
+
+    onMounted(() => {
+        getBranches();
+        // console.log(props.branch.parent_id);
+        form.parent_id = props.branch.parent_id;
+    });
 </script>
 
 <template>
-    <Head title="Create Branch" />
+    <Head title="Update Branch" />
     <authenticated-layout>
         <template #header>
             <Breadcrumbs :breadcrumbs="breadcrumbs" />
@@ -39,29 +47,31 @@
 
         <!-- Page Heading -->
         <div class="mx-auto mt-4 flex max-w-2xl flex-col justify-center">
-            <h1 class="text-center text-2xl font-bold text-gray-800">Creating a Branch</h1>
+            <h1 class="text-center text-2xl font-bold text-gray-800">
+                Updating a {{ props.branch.title }}
+            </h1>
 
-            <!-- Form of Creating a Section -->
+            <!-- Form of Creating a Branch -->
             <form
                 class="space-y-4 rounded-lg bg-white p-6 shadow-md"
-                @submit.prevent="form.post(route('branches.store'))"
+                @submit.prevent="form.patch(route('branches.update', props.branch.id))"
             >
                 <div class="mb-4">
                     <input
-                        class="focus:border-primary focus:ring-primary w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-1"
+                        class="w-full rounded-lg border border-gray-300 p-3 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                         v-model="form.title"
                         type="text"
                         placeholder="Title of Branch..."
                     />
-                    <InputError class="mt-2" :message="form.errors.title" />
+                    <InputError class="0 mt-2" :message="form.errors.title" />
                 </div>
                 <div class="mb-4" v-if="props.sections.length > 0">
                     <select
-                        class="focus:border-primary focus:ring-primary w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-1"
+                        class="w-full rounded-lg border border-gray-300 p-3 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                         v-model="form.section_id"
                         @change="getBranches"
                     >
-                        <option value="null" disabled selected hidden>Select Section</option>
+                        <option value="null" disabled selected>Select Section</option>
                         <option
                             v-for="section in props.sections"
                             :key="section.id"
@@ -74,10 +84,10 @@
                 </div>
                 <div class="mb-4" v-if="branches.length > 0">
                     <select
-                        class="focus:border-primary focus:ring-primary w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-1"
+                        class="w-full rounded-lg border border-gray-300 p-3 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                         v-model="form.parent_id"
                     >
-                        <option value="null" selected>Select Branch</option>
+                        <option :value="null" selected>Select Branch</option>
                         <option v-for="branch in branches" :key="branch.id" :value="branch.id">
                             {{ branch.title }}
                         </option>
@@ -86,11 +96,10 @@
                 </div>
                 <div class="flex justify-end">
                     <button
-                        class="bg-primary hover:bg-primary-hover focus:ring-primary rounded-lg px-6 py-3 text-white shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        class="rounded-lg bg-primary px-6 py-3 text-white shadow transition duration-150 ease-in-out hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         type="submit"
-                        :disabled="form.processing"
                     >
-                        Create
+                        Save
                     </button>
                 </div>
             </form>

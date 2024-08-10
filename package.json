@@ -30,6 +30,7 @@
     },
     "dependencies": {
         "oh-vue-icons": "^1.0.0-rc3",
+        "sweetalert2": "^11.12.4",
         "ziggy-js": "^2.3.0"
     }
 }

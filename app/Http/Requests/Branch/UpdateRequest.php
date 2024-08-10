@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Branch;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateRequest extends FormRequest
 {
@@ -22,7 +23,19 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('branches')->where(function ($query) {
+                    return $query
+                        ->where('id', '!=', $this->branch->id)
+                        ->where('section_id', $this->input('section_id'))
+                        ->where('parent_id', $this->input('parent_id'));
+                }),
+            ],
+            'section_id' => ['required', 'integer', 'exists:sections,id'],
+            'parent_id' => ['nullable'],
         ];
     }
 
@@ -34,7 +47,9 @@ class UpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            '*.required' => 'This field is required.',
+            '*.required' => __('validation.required'),
+            '*.unique' => __('validation.unique'),
+
         ];
     }
 }

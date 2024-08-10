@@ -21,8 +21,24 @@ class UpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
-            //
+            'title' => ['required', 'string', 'max:255', 'unique:sections,title,'.$this->section->id],
+
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            '*.required' => __('validation.required'),
+            '*.unique' => __('validation.unique'),
+
         ];
     }
 }
