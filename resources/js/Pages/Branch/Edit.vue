@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { Head, useForm } from '@inertiajs/vue3';
     import axios from 'axios';
-    import { onBeforeMount, onMounted, ref } from 'vue';
+    import { onMounted, ref } from 'vue';
     import Breadcrumbs from '@/Components/Breadcrumbs.vue';
     import InputError from '@/Components/InputError.vue';
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -33,7 +33,6 @@
 
     onMounted(() => {
         getBranches();
-        // console.log(props.branch.parent_id);
         form.parent_id = props.branch.parent_id;
     });
 </script>

@@ -19,6 +19,26 @@ export interface IBranch {
     parent_id: number | null;
     parent_title: string;
     children?: IBranch[];
+    themes?: ITheme[];
+}
+
+export interface ITheme {
+    id: number;
+    title: string;
+    description: string;
+    branch: IBranch;
+    messages?: IMessage[];
+}
+
+export interface IMessage {
+    id: number;
+    content: string;
+    theme_id: number;
+    is_liked: boolean;
+    likes: number;
+    is_not_solved_complaint: boolean;
+    user: IUser;
+    time: string;
 }
 
 export interface IFlash {

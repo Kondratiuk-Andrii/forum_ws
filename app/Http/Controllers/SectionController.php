@@ -41,7 +41,7 @@ class SectionController extends Controller
         Section::firstOrCreate($data);
 
         return redirect()->route('sections.index')
-            ->with('message', ['icon' => 'success', 'title' => 'Section created successfully']);
+            ->with('message', ['icon' => 'success', 'title' => "Section {$data['title']} was created successfully"]);
     }
 
     /**
@@ -72,7 +72,7 @@ class SectionController extends Controller
         $section->update($data);
 
         return redirect()->route('sections.index')
-            ->with('message', ['icon' => 'success', 'title' => 'Section updated successfully']);
+            ->with('message', ['icon' => 'success', 'title' => "Section {$section->title} was updated successfully"]);
     }
 
     /**
@@ -83,7 +83,7 @@ class SectionController extends Controller
         $section->delete();
 
         return redirect()->back()
-            ->with('message', ['icon' => 'success', 'title' => 'Section deleted successfully']);
+            ->with('message', ['icon' => 'success', 'title' => "Section {$section->title} was deleted successfully"]);
     }
 
     public function branchIndex(Section $section)

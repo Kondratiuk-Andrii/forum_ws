@@ -33,18 +33,20 @@
 
         <!-- Page Heading -->
 
-        <div class="mt-4 flex items-center justify-start gap-8 text-lg">
+        <div class="mt-4 flex items-center justify-start gap-8 px-4 text-lg">
             <div class="font-bold">Actions:</div>
             <Link
                 class="rounded-lg border bg-gray-50 px-4 py-2 transition hover:scale-105 hover:bg-gray-100"
                 :href="route('sections.create')"
             >
+                <v-icon name="md-add" />
                 Add Section
             </Link>
             <Link
                 class="rounded-lg border bg-gray-50 px-4 py-2 transition hover:scale-105 hover:bg-gray-100"
                 :href="route('branches.create')"
             >
+                <v-icon name="md-add" />
                 Add Branch
             </Link>
         </div>

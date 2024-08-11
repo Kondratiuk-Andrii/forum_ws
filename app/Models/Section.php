@@ -10,17 +10,16 @@ class Section extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = false;
+    protected $guarded = [];
 
     public function branches()
     {
-        return $this->hasMany(Branch::class);
+        return $this->hasMany(Branch::class, 'section_id', 'id');
     }
 
     public function parentBranches()
     {
-        return $this->hasMany(Branch::class)
+        return $this->hasMany(Branch::class, 'section_id', 'id')
             ->whereNull('parent_id');
     }
-
 }

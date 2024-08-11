@@ -16,7 +16,7 @@
         props.branch.parent_id
             ? [
                   { label: 'Forum', url: route('sections.index') },
-                  { label: `${props.branch.section_title}` },
+                  { label: `${props.branch.section_title}`, url: route('sections.index') },
                   {
                       label: `${props.branch.parent_title}`,
                       url: route('branches.show', props.branch.parent_id),
@@ -25,7 +25,7 @@
               ]
             : [
                   { label: 'Forum', url: route('sections.index') },
-                  { label: `${props.branch.section_title}` },
+                  { label: `${props.branch.section_title}`, url: route('sections.index') },
                   { label: `${props.branch.title}` },
               ]
     );
@@ -54,7 +54,7 @@
 
         <!-- Page Heading -->
 
-        <div class="mt-4 flex items-center justify-start gap-8 text-lg">
+        <div class="mt-4 flex items-center justify-between gap-8 px-4 text-lg">
             <h2 class="mb-4 flex items-center gap-2 text-2xl font-bold">
                 {{ props.branch.title }}
                 <Link :href="route('branches.edit', branch.id)">
@@ -70,12 +70,23 @@
                     />
                 </Link>
             </h2>
+            <div class="flex items-center gap-6">
+                <Link
+                    class="rounded-lg border bg-gray-50 px-4 py-2 transition hover:scale-105 hover:bg-gray-100"
+                    :href="route('branches.themes.create', branch.id)"
+                >
+                    <v-icon name="md-add" />
+                    Add Theme
+                </Link>
+            </div>
         </div>
         <!-- Page Body -->
         <div
             class="mt-8 space-y-4 px-4"
             v-if="props.branch.children && props.branch.children?.length > 0"
         >
+            <div class="text-2xl font-bold">Sections:</div>
+            <!-- Branches -->
             <div class="space-y-4">
                 <div v-for="child in props.branch.children" :key="child.id">
                     <Link
@@ -83,6 +94,23 @@
                         :href="route('branches.show', child.id)"
                     >
                         {{ child.title }}
+                    </Link>
+                </div>
+            </div>
+        </div>
+        <div
+            class="mt-8 space-y-4 px-4"
+            v-if="props.branch.themes && props.branch.themes?.length > 0"
+        >
+            <div class="text-2xl font-bold">Themes:</div>
+            <!-- Themes -->
+            <div class="space-y-4">
+                <div v-for="theme in props.branch.themes" :key="theme.id">
+                    <Link
+                        class="block rounded-xl bg-gray-50 px-6 py-4 text-xl shadow-md transition hover:-translate-y-2 hover:cursor-pointer hover:bg-gray-100 hover:shadow-lg"
+                        :href="route('themes.show', theme.id)"
+                    >
+                        {{ theme.title }}
                     </Link>
                 </div>
             </div>

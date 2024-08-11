@@ -10,7 +10,7 @@ class Branch extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = false;
+    protected $guarded = [];
 
     public function section()
     {
@@ -19,12 +19,12 @@ class Branch extends Model
 
     public function parent()
     {
-        return $this->belongsTo(Branch::class, 'parent_id');
+        return $this->belongsTo(Branch::class, 'parent_id', 'id');
     }
 
     public function children()
     {
-        return $this->hasMany(Branch::class, 'parent_id');
+        return $this->hasMany(Branch::class, 'parent_id', 'id');
     }
 
     public function getSectionTitleAttribute()
@@ -35,5 +35,10 @@ class Branch extends Model
     public function getParentTitleAttribute()
     {
         return $this->parent ? $this->parent->title : 'No Parent';
+    }
+
+    public function themes()
+    {
+        return $this->hasMany(Theme::class, 'branch_id', 'id');
     }
 }

@@ -43,7 +43,7 @@ class BranchController extends Controller
         Branch::firstOrCreate($data);
 
         return redirect()->route('sections.index')
-            ->with('message', ['icon' => 'success', 'title' => 'Branch created successfully']);
+            ->with('message', ['icon' => 'success', 'title' => "Branch {$data['title']} was created successfully"]);
     }
 
     /**
@@ -62,10 +62,12 @@ class BranchController extends Controller
      */
     public function edit(Branch $branch)
     {
-
+        $sections = Section::all();
         return inertia('Branch/Edit', [
             'branch' => BranchResource::make($branch),
-            'sections' => $branch->parent_id ? SectionWithBranchesResource::collection(Section::all()) : SectionResource::collection(Section::all()),
+            'sections' => $branch->parent_id ?
+                SectionWithBranchesResource::collection($sections) :
+                SectionResource::collection($sections),
         ]);
     }
 
@@ -78,7 +80,7 @@ class BranchController extends Controller
         $branch->update($data);
 
         return redirect()->route('branches.show', $branch->id)
-            ->with('message', ['icon' => 'success', 'title' => 'Branch updated successfully']);
+            ->with('message', ['icon' => 'success', 'title' => "Branch {$branch->title} was updated successfully"]);
     }
 
     /**
@@ -89,7 +91,7 @@ class BranchController extends Controller
         $branch->delete();
 
         return redirect()->route('sections.index')
-            ->with('message', ['icon' => 'success', 'title' => 'Branch deleted successfully']);
+            ->with('message', ['icon' => 'success', 'title' => "Branch {$branch->title} was deleted successfully"]);
     }
 
     /**
@@ -97,6 +99,10 @@ class BranchController extends Controller
      */
     public function themeCreate(Branch $branch)
     {
-        // TODO: Theme create
+        $branch = BranchResource::make($branch);
+
+        return inertia('Theme/Create', [
+            'branch' => BranchResource::make($branch),
+        ]);
     }
 }

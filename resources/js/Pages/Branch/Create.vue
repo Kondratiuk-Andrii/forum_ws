@@ -17,7 +17,7 @@
     });
     const breadcrumbs = ref([
         { label: 'Forum', url: route('sections.index') },
-        { label: 'Create Branch' },
+        { label: 'Create Branch', url: route('sections.index') },
     ]);
 
     const branches = ref<{ id: number; title: string }[]>([]);
@@ -39,7 +39,7 @@
 
         <!-- Page Heading -->
         <div class="mx-auto mt-4 flex max-w-2xl flex-col justify-center">
-            <h1 class="text-center text-2xl font-bold text-gray-800">Creating a Branch</h1>
+            <h1 class="text-center text-2xl font-bold text-gray-800">Create a Branch</h1>
 
             <!-- Form of Creating a Section -->
             <form
@@ -48,7 +48,7 @@
             >
                 <div class="mb-4">
                     <input
-                        class="focus:border-primary focus:ring-primary w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-1"
+                        class="w-full rounded-lg border border-gray-300 p-3 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                         v-model="form.title"
                         type="text"
                         placeholder="Title of Branch..."
@@ -57,7 +57,7 @@
                 </div>
                 <div class="mb-4" v-if="props.sections.length > 0">
                     <select
-                        class="focus:border-primary focus:ring-primary w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-1"
+                        class="w-full rounded-lg border border-gray-300 p-3 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                         v-model="form.section_id"
                         @change="getBranches"
                     >
@@ -74,7 +74,7 @@
                 </div>
                 <div class="mb-4" v-if="branches.length > 0">
                     <select
-                        class="focus:border-primary focus:ring-primary w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-1"
+                        class="w-full rounded-lg border border-gray-300 p-3 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                         v-model="form.parent_id"
                     >
                         <option value="null" selected>Select Branch</option>
@@ -86,7 +86,7 @@
                 </div>
                 <div class="flex justify-end">
                     <button
-                        class="bg-primary hover:bg-primary-hover focus:ring-primary rounded-lg px-6 py-3 text-white shadow transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        class="rounded-lg bg-primary px-6 py-3 text-white shadow transition duration-150 ease-in-out hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         type="submit"
                         :disabled="form.processing"
                     >
